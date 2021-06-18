@@ -43,9 +43,9 @@ public int index;
         jLabel5 = new javax.swing.JLabel();
         Name = new javax.swing.JTextField();
         MobNo = new javax.swing.JTextField();
-        DOB = new org.jdesktop.swingx.JXDatePicker();
         Enroll_no = new javax.swing.JTextField();
         jLabel8w = new javax.swing.JLabel();
+        DOB = new org.jdesktop.swingx.JXDatePicker();
         Show_Img = new javax.swing.JDesktopPane();
         Image_Label = new javax.swing.JLabel();
         Home_Button = new javax.swing.JLabel();
@@ -170,17 +170,28 @@ public int index;
         jLabel8w.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel8w.setText("Enrollment No.*");
 
+        DOB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DOBActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Name))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(Name))
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel8w)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(Enroll_no, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
@@ -191,12 +202,9 @@ public int index;
                                 .addGap(28, 28, 28)))
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(MobNo, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(DOB, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel8w)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Enroll_no, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addComponent(DOB, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -397,7 +405,7 @@ public int index;
         new Home(Home.User_Loggedin).setVisible(true);
     }//GEN-LAST:event_Back_ButtonMouseClicked
 
-     private byte[] Convert_To_BLOB(String file) {
+     protected static byte[] Convert_To_BLOB(String file) {
         ByteArrayOutputStream bos = null;
         try {
             System.out.println("Input File Image:"+file);
@@ -572,6 +580,10 @@ public int index;
         // TODO add your handling code here:
     }//GEN-LAST:event_deptKeyTyped
 
+    private void DOBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DOBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DOBActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -607,7 +619,7 @@ public int index;
     private javax.swing.JLabel Back_Button;
     private javax.swing.JButton Cancel_Form;
     public javax.swing.JTextField ClgName;
-    public org.jdesktop.swingx.JXDatePicker DOB;
+    private org.jdesktop.swingx.JXDatePicker DOB;
     public javax.swing.JTextField Enroll_no;
     private javax.swing.JLabel Home_Button;
     private javax.swing.JLabel Image_Label;
