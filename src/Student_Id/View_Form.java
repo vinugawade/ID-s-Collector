@@ -11,6 +11,8 @@ import java.io.*;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -37,7 +39,7 @@ public int srid;
         view_table.getColumnModel().getColumn(i).setPreferredWidth(dim[i]);
         }
         try {
-            fetchDB();
+            fetchDB("SELECT * FROM Students_ID");
         } catch (SQLException e) {
             System.out.println(e+"View_Form@39\n"+Arrays.toString(e.getStackTrace()));
         }
@@ -52,13 +54,21 @@ public int srid;
         }
         return false;
     } 
-    private void fetchDB() throws SQLException{
+    private void fetchDB(String sql) throws SQLException{
         
          model= (DefaultTableModel)view_table.getModel();
-            sorter = new TableRowSorter<>(model);    
-            view_table.setRowSorter(sorter);
-        prestmt = DBconnect.getConnect().prepareStatement("SELECT * FROM Students_ID");
+        prestmt = DBconnect.getConnect().prepareStatement(sql);
+        if(!sql.equals("SELECT * FROM Students_ID")){   
+        prestmt.setString(1,"%"+search.getText()+"%");
+        prestmt.setString(2,"%"+search.getText()+"%");
+        prestmt.setString(3,"%"+search.getText()+"%");
+        prestmt.setString(4,"%"+search.getText()+"%");
+        prestmt.setString(5,"%"+search.getText()+"%");
+        prestmt.setString(6,"%"+search.getText()+"%");    
+            System.out.println(sql);
+        }
                 rs = prestmt.executeQuery();
+                model.setRowCount(0);
                 while(rs.next()){
                     model.addRow(new Object[]{rs.getInt("srno"),rs.getString("name"),rs.getString("dob"),rs.getString("mobile"),rs.getString("college"),rs.getString("address"),rs.getString("dept"),rs.getString("enroll_no")});
                 }
@@ -71,6 +81,7 @@ public int srid;
     private void initComponents() {
 
         Img_File = new javax.swing.JButton();
+        jProgressBar1 = new javax.swing.JProgressBar();
         Back_Button1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         view_table = new javax.swing.JTable();
@@ -99,6 +110,9 @@ public int srid;
         jLabel9 = new javax.swing.JLabel();
         dbdate = new org.jdesktop.swingx.JXDatePicker();
         Img_File1 = new javax.swing.JButton();
+        search = new javax.swing.JTextField();
+        searchbtn = new javax.swing.JButton();
+        refresh = new javax.swing.JButton();
 
         Img_File.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         Img_File.setText("Browse");
@@ -278,6 +292,20 @@ public int srid;
             }
         });
 
+        searchbtn.setText("Search");
+        searchbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchbtnActionPerformed(evt);
+            }
+        });
+
+        refresh.setText("Refresh");
+        refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -291,21 +319,28 @@ public int srid;
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Home_Button)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(177, 177, 177))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
+                        .addComponent(refresh)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(searchbtn)
+                        .addGap(20, 20, 20))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(dbname, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(dbnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(dbdate, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(Img_File1))
+                                .addGap(6, 6, 6)
+                                .addComponent(Img_File1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(dbname, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(dbnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dbdate, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -342,13 +377,22 @@ public int srid;
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(Home_Button)
-                        .addComponent(Back_Button1))
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(Home_Button)
+                                .addComponent(Back_Button1))
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(searchbtn)
+                            .addComponent(refresh))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -502,7 +546,7 @@ byte[] imageByte;
                                      System.out.println("Student Information Updated...");
                                      JOptionPane.showMessageDialog(null, "Student Information Updated...", "Task Complete", JOptionPane.INFORMATION_MESSAGE);
                                      model.setRowCount(0);
-                                     fetchDB();
+                                     fetchDB("SELECT * FROM Students_ID");
                                  }else{
                                  System.out.println("Something Goes Wrong Please Try Again...");
                                      JOptionPane.showMessageDialog(null, "Something Is Wrong Please Try Again...", "Task Fail", JOptionPane.INFORMATION_MESSAGE);
@@ -534,7 +578,7 @@ byte[] imageByte;
                                 dbnumber.setText("");
                                 dbenroll_no.setText("");
                                 dbdept.setText("");
-                                fetchDB();
+                                fetchDB("SELECT * FROM Students_ID");
                             }else{
                             System.out.println("Something Goes Wrong Please Try Again...");
                                 JOptionPane.showMessageDialog(null, "Something Is Wrong Please Try Again...", "Task Fail", JOptionPane.INFORMATION_MESSAGE);
@@ -646,6 +690,28 @@ byte[] imageByte;
         }
     }//GEN-LAST:event_Img_File1ActionPerformed
 
+    private void searchbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchbtnActionPerformed
+  
+         if(search.getText().equals("")){
+                JOptionPane.showMessageDialog(null,"PLEASE ENTER INTO SERCH BOX.");                        
+         }else{
+                try {
+                     fetchDB("SELECT * FROM `Students_ID` WHERE \"name\" LIKE ? OR \"mobile\" LIKE ? OR \"college\" LIKE ? OR \"address\" LIKE ? OR \"enroll_no\" LIKE ? OR \"dept\" LIKE ?");
+                     } catch (SQLException e) {
+                           System.out.println(e+"View_Form@687\n"+Arrays.toString(e.getStackTrace()));
+                     }    
+              }
+    }//GEN-LAST:event_searchbtnActionPerformed
+
+    private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
+    try {
+        search.setText("");
+        fetchDB("SELECT * FROM Students_ID");
+    } catch (SQLException e) {
+        System.out.println(e+"View_Form@710\n"+Arrays.toString(e.getStackTrace()));
+    }
+    }//GEN-LAST:event_refreshActionPerformed
+
     
     
     public static void main(String args[]) {
@@ -697,9 +763,13 @@ byte[] imageByte;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     public javax.swing.JLabel pic;
+    private javax.swing.JButton refresh;
+    private javax.swing.JTextField search;
+    private javax.swing.JButton searchbtn;
     private javax.swing.JButton update;
     private javax.swing.JButton view_id;
     public javax.swing.JTable view_table;
