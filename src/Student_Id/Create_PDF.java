@@ -9,7 +9,9 @@ import com.itextpdf.text.pdf.*;
 import java.awt.Desktop;
 import java.io.*;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileSystemView;
 
@@ -51,7 +53,7 @@ public class Create_PDF  {
                table.addCell("Enrollment No");table.addCell(":");  table.addCell(rs.getString("enroll_no"));
                table.addCell("Department");table.addCell(":");  table.addCell(rs.getString("dept"));
                table.addCell("Mobile No");table.addCell(":");  table.addCell(rs.getString("mobile"));
-               table.addCell("Address"); table.addCell(":"); table.addCell(rs.getString("address"));
+               table.addCell("Issued Date"); table.addCell(":"); table.addCell(new SimpleDateFormat("dd-MM-yyyy").format(new Date()).toString());
                table.addCell("Principal Sign");table.addCell(":");  table.addCell("");
 
             document.add(table);    
