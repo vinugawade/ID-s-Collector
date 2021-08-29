@@ -1,6 +1,8 @@
 package Student_Id;
 import Required.DBconnect;
-import com.sun.glass.events.*;
+//import java.awt.event.KeyEvent.VK_BACKSPACE;
+import java.awt.event.KeyEvent;
+//import com.sun.glass.events.*;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
@@ -43,9 +45,9 @@ public int index;
         jLabel5 = new javax.swing.JLabel();
         Name = new javax.swing.JTextField();
         MobNo = new javax.swing.JTextField();
-        DOB = new org.jdesktop.swingx.JXDatePicker();
         Enroll_no = new javax.swing.JTextField();
         jLabel8w = new javax.swing.JLabel();
+        DOB = new org.jdesktop.swingx.JXDatePicker();
         Show_Img = new javax.swing.JDesktopPane();
         Image_Label = new javax.swing.JLabel();
         Home_Button = new javax.swing.JLabel();
@@ -98,7 +100,7 @@ public int index;
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(52, 52, 52)
                 .addComponent(jLabel1)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,11 +178,7 @@ public int index;
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Name))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
@@ -190,12 +188,21 @@ public int index;
                                 .addComponent(jLabel4)
                                 .addGap(28, 28, 28)))
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(MobNo, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(DOB, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel8w)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Enroll_no, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(MobNo, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(DOB, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(Name))
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel8w)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(Enroll_no, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -607,7 +614,7 @@ public int index;
     private javax.swing.JLabel Back_Button;
     private javax.swing.JButton Cancel_Form;
     public javax.swing.JTextField ClgName;
-    public org.jdesktop.swingx.JXDatePicker DOB;
+    private org.jdesktop.swingx.JXDatePicker DOB;
     public javax.swing.JTextField Enroll_no;
     private javax.swing.JLabel Home_Button;
     private javax.swing.JLabel Image_Label;
