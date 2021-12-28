@@ -10,8 +10,15 @@ import java.io.*;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.*;
 import javax.swing.*;
+<<<<<<< HEAD
+=======
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+>>>>>>> 1f86e9ed49bae7f10e5814c147419018f2ff4e67
 import javax.swing.filechooser.*;
 import javax.swing.table.*;
 
@@ -79,6 +86,8 @@ public class View_Form extends javax.swing.JFrame {
             });
         }
     }
+
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -550,7 +559,7 @@ public class View_Form extends javax.swing.JFrame {
                 } else {
                     prestmt.setString(5, dbaddress.getText());
                 }
-                
+
                 int result = prestmt.executeUpdate();
                 System.out.println("\n Result:" + result);
                 if (result == 1) {
@@ -691,7 +700,7 @@ public class View_Form extends javax.swing.JFrame {
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
