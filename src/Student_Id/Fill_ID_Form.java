@@ -8,7 +8,6 @@ import java.util.*;
 import javax.swing.*;
 import javax.imageio.*;
 import java.awt.image.*;
-import java.util.regex.*;
 import javax.swing.filechooser.*;
 import Required.DBconnect;
 

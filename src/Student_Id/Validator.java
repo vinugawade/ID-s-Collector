@@ -1,13 +1,13 @@
 package Student_Id;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Arrays;
+import java.io.IOException;
 import java.util.regex.Matcher;
+import java.io.FileInputStream;
 import java.util.regex.Pattern;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 
 /**
  *
