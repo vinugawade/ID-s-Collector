@@ -1,28 +1,29 @@
 package Student_Id;
-import Required.DBconnect;
-//import java.awt.event.KeyEvent.VK_BACKSPACE;
-import java.awt.event.KeyEvent;
-//import com.sun.glass.events.*;
-import java.awt.*;
-import java.awt.image.*;
+
 import java.io.*;
 import java.sql.*;
+import java.awt.*;
 import java.text.*;
 import java.util.*;
-import javax.imageio.*;
 import javax.swing.*;
+import javax.imageio.*;
+import java.awt.image.*;
+import java.util.regex.*;
 import javax.swing.filechooser.*;
+import Required.DBconnect;
+
 /*
  * @author Vinu_Gawade
  */
 public class Fill_ID_Form extends javax.swing.JFrame {
 
-public static ResultSet rs=Login_Page.rs;
-public static PreparedStatement prestmt=Login_Page.prestmt;
-public JFileChooser Image_Selector;
-public int index;
+    public static ResultSet rs = Login_Page.rs;
+    public static PreparedStatement prestmt = Login_Page.prestmt;
+    public JFileChooser Image_Selector;
+    public int index;
+
     public Fill_ID_Form() {
-        initComponents();     
+        initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/Img/desktop_logo.png")).getImage());
     }
 
@@ -81,7 +82,7 @@ public int index;
         setName("Fill_ID"); // NOI18N
         setSize(new java.awt.Dimension(515, 400));
 
-        Back_Button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/back2.png"))); // NOI18N
+        Back_Button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Back.png"))); // NOI18N
         Back_Button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Back_ButtonMouseClicked(evt);
@@ -100,7 +101,7 @@ public int index;
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(52, 52, 52)
                 .addComponent(jLabel1)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,25 +150,10 @@ public int index;
         jLabel5.setText("Date of Birth*");
 
         Name.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        Name.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                NameKeyTyped(evt);
-            }
-        });
 
         MobNo.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        MobNo.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                MobNoKeyTyped(evt);
-            }
-        });
 
         Enroll_no.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        Enroll_no.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                Enroll_noKeyTyped(evt);
-            }
-        });
 
         jLabel8w.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel8w.setText("Enrollment No.*");
@@ -191,9 +177,7 @@ public int index;
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(MobNo, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(DOB, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(DOB, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(jPanel3Layout.createSequentialGroup()
                             .addComponent(jLabel3)
@@ -258,11 +242,6 @@ public int index;
         jLabel7.setText("Your Address*");
 
         ClgName.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        ClgName.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                ClgNameKeyTyped(evt);
-            }
-        });
 
         Adr.setColumns(20);
         Adr.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
@@ -309,11 +288,6 @@ public int index;
         jLabel8.setText("Deparment *");
 
         dept.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        dept.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                deptKeyTyped(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -404,180 +378,150 @@ public int index;
         new Home(Home.User_Loggedin).setVisible(true);
     }//GEN-LAST:event_Back_ButtonMouseClicked
 
-     private byte[] Convert_To_BLOB(String file) {
-        ByteArrayOutputStream bos = null;
-        try {
-            System.out.println("Input File Image:"+file);
-            File f = new File(file);
-            FileInputStream fis = new FileInputStream(f);
-            byte[] buffer = new byte[500000];
-            bos = new ByteArrayOutputStream();
-            for (int len; (len = fis.read(buffer)) != -1;) {
-                bos.write(buffer, 0, len);
-            }
-        } catch (FileNotFoundException ex) {
-            System.out.println(ex+"View_Form@412\n"+Arrays.toString(ex.getStackTrace()));
-        } catch (IOException ex) {
-            System.out.println(ex+"View_Form@414\n"+Arrays.toString(ex.getStackTrace()));
-        }
-        return bos != null ? bos.toByteArray() : null;
-    }
     private void Home_ButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Home_ButtonMouseClicked
         this.setVisible(false);
         new Login_Page().setVisible(true);
     }//GEN-LAST:event_Home_ButtonMouseClicked
 
     private void Img_FileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Img_FileActionPerformed
-                                    
-            Image_Selector = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
-            Image_Selector.setFileFilter(new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes()));
-            Image_Selector.setFileSelectionMode(JFileChooser.FILES_ONLY); 
-            
-        if (Image_Selector.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
-                                
-                    System.out.println("Selected File Image:"+Image_Selector.getSelectedFile().getAbsolutePath());
-                    
-                    BufferedImage img = null;
-                    try {
-                        img = ImageIO.read(new File(Image_Selector.getSelectedFile().getAbsolutePath()));
-                    } catch (IOException e) {
-                        System.out.println(e+"\nFill_ID_Form@437\n"+Arrays.toString(e.getStackTrace()));
-                    }
-                    Image dimg = img.getScaledInstance(Image_Label.getWidth(), Image_Label.getHeight(),Image.SCALE_SMOOTH);
-                    Image_Label.setIcon(new ImageIcon(dimg));                 
+
+        Image_Selector = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+        Image_Selector.setFileFilter(new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes()));
+        Image_Selector.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        if (Image_Selector.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+
+            System.out.println("Selected File Image:" + Image_Selector.getSelectedFile().getAbsolutePath());
+
+            BufferedImage img = null;
+            try {
+                img = ImageIO.read(new File(Image_Selector.getSelectedFile().getAbsolutePath()));
+            } catch (IOException e) {
+                System.out.println(e + "\nFill_ID_Form@437\n" + Arrays.toString(e.getStackTrace()));
+            }
+            Image dimg = img.getScaledInstance(Image_Label.getWidth(), Image_Label.getHeight(), Image.SCALE_SMOOTH);
+            Image_Label.setIcon(new ImageIcon(dimg));
         }
-    
+
     }//GEN-LAST:event_Img_FileActionPerformed
 
     private void Save_FormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Save_FormActionPerformed
 
         try {
-                        prestmt = DBconnect.getConnect().prepareStatement("SELECT COUNT(*) FROM (SELECT * FROM Students_ID)");
-                              rs= prestmt.executeQuery();
-                              if(rs.getInt("COUNT(*)")<0){
-                                  System.out.println("Existing Rows:"+index);
-                                  index=1;
-                                  System.out.println("Start Rows:"+index);
-                              }else{
-                                index=rs.getInt("COUNT(*)");
-                                System.out.println("Existing Rows:"+index);
-                                ++index;
-                                System.out.println("Start Rows:"+index);
-                              }
-                      rs.close();
-                            
-                      prestmt = DBconnect.getConnect().prepareStatement("INSERT INTO \"Students_ID\" (\"srno\", \"photo\", \"name\", \"dob\", \"mobile\", \"college\", \"address\", \"enroll_no\", \"dept\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                          
-                            prestmt.setInt(1,index);
-                          
-                            if(Image_Selector==null){
-                                JOptionPane.showMessageDialog(null,"PLEASE SELECT YOUR PICTURE.");                        
-                            }else{
-                                prestmt.setBytes(2,Convert_To_BLOB(Image_Selector.getSelectedFile().getAbsolutePath()));         
-                            }
-                            
-                            if(Name.getText().isEmpty()){
-                                JOptionPane.showMessageDialog(null,"PLEASE ENTER NAME.");
-                            }else{
-                                prestmt.setString(3,Name.getText());
-                            }
-                            
-                            if(DOB.getDate()==null){
-                                JOptionPane.showMessageDialog(null,"PLEASE SELECT DATE OF BIRTH.");
-                            }else{
-                            prestmt.setString(4,new SimpleDateFormat("dd-MM-yyyy").format(DOB.getDate()));
-                            }
-                            
-                            if(MobNo.getText().isEmpty()){
-                                JOptionPane.showMessageDialog(null,"PLEASE ENTER MOBILE NUMBER.");
-                            }else{
-                                prestmt.setString(5,MobNo.getText());    
-                            }
-                            
-                            if(ClgName.getText().isEmpty()){
-                                JOptionPane.showMessageDialog(null,"PLEASE ENTER COLLAGE NAME.");
-                            }else{
-                                prestmt.setString(6,ClgName.getText());   
-                            }
-                            
-                            if(Adr.getText().isEmpty()){
-                                JOptionPane.showMessageDialog(null,"PLEASE ENTER ADDRESS.");
-                            }else{
-                                prestmt.setString(7,Adr.getText());
-                            }
-                            
-                            if(Enroll_no.getText().isEmpty()){
-                                JOptionPane.showMessageDialog(null,"PLEASE ENTER ADDRESS.");
-                            }else{
-                                prestmt.setString(8,Enroll_no.getText());
-                            }
-                            
-                            if(dept.getText().isEmpty()){
-                                JOptionPane.showMessageDialog(null,"PLEASE ENTER ADDRESS.");
-                            }else{
-                                prestmt.setString(9,dept.getText());
-                            }
-                            int result=prestmt.executeUpdate();
-                            System.out.println("\n Result:"+result);
-                            if(result==1){
-                                System.out.println("ID Successfully Added...");
-                                JOptionPane.showMessageDialog(null, "ID Successfully Added...", "Task Complete", JOptionPane.INFORMATION_MESSAGE);
-                                this.setVisible(false);
-                                new View_Form().setVisible(true);
-                            }else{
-                            System.out.println("Something Goes Wrong Please Try Again...");
-                                JOptionPane.showMessageDialog(null, "Something Is Wrong Please Try Again...", "Task Fail", JOptionPane.INFORMATION_MESSAGE);
-                                this.setVisible(false);
-                                new Login_Page().setVisible(true);
-                            }
-                                rs.close();
-                      
-                } catch (SQLException e) {
-            System.out.println(e+"\nFill_ID_Form@529\n"+Arrays.toString(e.getStackTrace()));
-                      try {
-                          rs.close();
-                      } catch (SQLException ex) {
-            System.out.println(ex+"\nFill_ID_Form@533\n"+Arrays.toString(ex.getStackTrace()));
-                      }
-                }
-    }//GEN-LAST:event_Save_FormActionPerformed
+            prestmt = DBconnect.getConnect().prepareStatement("SELECT COUNT(*) FROM (SELECT * FROM Students_ID)");
+            rs = prestmt.executeQuery();
+            if (rs.getInt("COUNT(*)") < 0) {
+                System.out.println("Existing Rows:" + index);
+                index = 1;
+                System.out.println("Start Rows:" + index);
+            } else {
+                index = rs.getInt("COUNT(*)");
+                System.out.println("Existing Rows:" + index);
+                ++index;
+                System.out.println("Start Rows:" + index);
+            }
+            rs.close();
 
+            prestmt = DBconnect.getConnect().prepareStatement("INSERT INTO \"Students_ID\" (\"srno\", \"photo\", \"name\", \"dob\", \"mobile\", \"college\", \"address\", \"enroll_no\", \"dept\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+            prestmt.setInt(1, index);
+
+            if (Image_Selector == null) {
+                JOptionPane.showMessageDialog(null, "PLEASE SELECT YOUR PICTURE.");
+            } else {
+                prestmt.setBytes(2, Validator.Convert_To_BLOB(Image_Selector.getSelectedFile().getAbsolutePath()));
+            }
+
+            if (Name.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "PLEASE ENTER NAME.");
+            } else {
+                if (Validator.isValidText(Name.getText())) {
+                    prestmt.setString(3, Name.getText());
+                } else {
+                    JOptionPane.showMessageDialog(null, "PLEASE ENTER VALID NAME.");
+                }
+            }
+
+            if (DOB.getDate() == null) {
+                JOptionPane.showMessageDialog(null, "PLEASE SELECT DATE OF BIRTH.");
+            } else {
+                prestmt.setString(4, new SimpleDateFormat("dd-MM-yyyy").format(DOB.getDate()));
+            }
+
+            if (MobNo.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "PLEASE ENTER MOBILE NUMBER.");
+            } else {
+                if (Validator.isValidPhoneNo(MobNo.getText())) {
+                    prestmt.setString(5, MobNo.getText());
+                } else {
+                    JOptionPane.showMessageDialog(null, "PLEASE ENTER VALID MOBILE NUMBER.");
+                }
+            }
+
+            if (Enroll_no.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "PLEASE ENTER ENROLLMENT NUMBER.");
+            } else {
+                if (Validator.isValidEnrollNo(Enroll_no.getText())) {
+                    prestmt.setString(8, Enroll_no.getText());
+                } else {
+                    JOptionPane.showMessageDialog(null, "PLEASE ENTER VALID ENROLLMENT NUMBER.");
+                }
+            }
+
+            if (dept.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "PLEASE ENTER DEPARTMENT NAME.");
+            } else {
+                if (Validator.isValidText(dept.getText())) {
+                    prestmt.setString(9, dept.getText());
+                } else {
+                    JOptionPane.showMessageDialog(null, "PLEASE ENTER VALID DEPARTMENT NAME.");
+                }
+            }
+
+            if (ClgName.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "PLEASE ENTER COLLEGE NAME.");
+            } else {
+                if (Validator.isValidText(ClgName.getText())) {
+                    prestmt.setString(6, ClgName.getText());
+                } else {
+                    JOptionPane.showMessageDialog(null, "PLEASE ENTER VALID COLLEGE NAME.");
+                }
+            }
+
+            if (Adr.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "PLEASE ENTER ADDRESS.");
+            } else {
+                prestmt.setString(7, Adr.getText());
+            }
+
+            int result = prestmt.executeUpdate();
+            System.out.println("\n Result:" + result);
+            if (result == 1) {
+                System.out.println("ID Successfully Added...");
+                JOptionPane.showMessageDialog(null, "ID Successfully Added...", "Task Complete", JOptionPane.INFORMATION_MESSAGE);
+                this.setVisible(false);
+                new View_Form().setVisible(true);
+            } else {
+                System.out.println("Something Goes Wrong Please Try Again...");
+                JOptionPane.showMessageDialog(null, "Something Is Wrong Please Try Again...", "Task Fail", JOptionPane.INFORMATION_MESSAGE);
+                this.setVisible(false);
+                new Login_Page().setVisible(true);
+            }
+            rs.close();
+
+        } catch (SQLException e) {
+            System.out.println(e + "\nFill_ID_Form@530\n" + Arrays.toString(e.getStackTrace()));
+            try {
+                rs.close();
+            } catch (SQLException ex) {
+                System.out.println(ex + "\nFill_ID_Form@521\n" + Arrays.toString(ex.getStackTrace()));
+            }
+        }
+    }//GEN-LAST:event_Save_FormActionPerformed
     private void Cancel_FormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Cancel_FormActionPerformed
         this.setVisible(false);
         new Home(Home.User_Loggedin).setVisible(true);
     }//GEN-LAST:event_Cancel_FormActionPerformed
-
-    private void MobNoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_MobNoKeyTyped
-        if(!(Character.isDigit(evt.getKeyChar()) || (evt.getKeyChar()==KeyEvent.VK_BACKSPACE) || evt.getKeyChar()==KeyEvent.VK_DELETE)){
-            evt.consume();
-            JOptionPane.showMessageDialog(null,"PLEASE ENTER NUMBERS ONLY.");
-            }    
-    }//GEN-LAST:event_MobNoKeyTyped
-
-    private void NameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NameKeyTyped
-       if(!(Character.isAlphabetic(evt.getKeyChar()) || (evt.getKeyChar()==' ')|| (evt.getKeyChar()==KeyEvent.VK_BACKSPACE) || evt.getKeyChar()==KeyEvent.VK_DELETE)){
-            evt.consume();
-            JOptionPane.showMessageDialog(null,"PLEASE ENTER CHARACTERS ONLY");
-        }
-    }//GEN-LAST:event_NameKeyTyped
-
-    private void ClgNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ClgNameKeyTyped
-        if(!(Character.isAlphabetic(evt.getKeyChar()) || (evt.getKeyChar()==' ') || (evt.getKeyChar()==',') || (evt.getKeyChar()==KeyEvent.VK_BACKSPACE) || evt.getKeyChar()==KeyEvent.VK_DELETE)){
-            evt.consume();
-            JOptionPane.showMessageDialog(null,"PLEASE ENTER CHARACTERS ONLY");
-        }
-    }//GEN-LAST:event_ClgNameKeyTyped
-
-    private void Enroll_noKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Enroll_noKeyTyped
-        if(!(Character.isDigit(evt.getKeyChar()) || (evt.getKeyChar()==KeyEvent.VK_BACKSPACE) || evt.getKeyChar()==KeyEvent.VK_DELETE)){
-                    evt.consume();
-                    JOptionPane.showMessageDialog(null,"PLEASE ENTER NUMBERS ONLY.");
-                    } 
-    }//GEN-LAST:event_Enroll_noKeyTyped
-
-    private void deptKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_deptKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_deptKeyTyped
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

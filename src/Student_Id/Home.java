@@ -22,7 +22,6 @@ public static String User_Loggedin;
         jPanel1 = new javax.swing.JPanel();
         View_ID = new javax.swing.JButton();
         Form_Fill1 = new javax.swing.JButton();
-        Back_Button = new javax.swing.JLabel();
         user = new javax.swing.JLabel();
         Home_Button = new javax.swing.JLabel();
 
@@ -72,13 +71,6 @@ public static String User_Loggedin;
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
-        Back_Button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/back2.png"))); // NOI18N
-        Back_Button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                Back_ButtonMouseClicked(evt);
-            }
-        });
-
         user.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
 
         Home_Button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/home.png"))); // NOI18N
@@ -97,10 +89,8 @@ public static String User_Loggedin;
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(Back_Button)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Home_Button)
-                        .addGap(12, 12, 12)
+                        .addGap(42, 42, 42)
                         .addComponent(Head_Home, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(user))
@@ -116,9 +106,7 @@ public static String User_Loggedin;
                             .addComponent(user)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Home_Button)
-                            .addComponent(Back_Button))))
+                        .addComponent(Home_Button)))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(20, Short.MAX_VALUE))
@@ -148,11 +136,6 @@ public static String User_Loggedin;
             new View_Form().setVisible(true);     
             }
     }//GEN-LAST:event_Form_Fill1ActionPerformed
-
-    private void Back_ButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Back_ButtonMouseClicked
-        this.setVisible(false);
-        new Login_Page().setVisible(true);
-    }//GEN-LAST:event_Back_ButtonMouseClicked
 
     private void Home_ButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Home_ButtonMouseClicked
         this.setVisible(false);
@@ -190,7 +173,6 @@ public static String User_Loggedin;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Back_Button;
     public javax.swing.JButton Form_Fill1;
     public javax.swing.JLabel Head_Home;
     private javax.swing.JLabel Home_Button;
