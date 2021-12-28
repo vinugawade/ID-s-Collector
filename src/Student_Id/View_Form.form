@@ -219,7 +219,7 @@
     <Component class="javax.swing.JLabel" name="Back_Button1">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/Img/Back.png"/>
+          <Image iconType="3" name="/Img/back.png"/>
         </Property>
       </Properties>
       <Events>
