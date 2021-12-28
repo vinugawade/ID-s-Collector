@@ -22,7 +22,7 @@ public static PreparedStatement prestmt=Login_Page.prestmt;
 public JFileChooser Image_Selector;
 public int index;
     public Fill_ID_Form() {
-        initComponents();     
+        initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/Img/desktop_logo.png")).getImage());
     }
 
@@ -172,6 +172,12 @@ public int index;
         jLabel8w.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel8w.setText("Enrollment No.*");
 
+        DOB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DOBActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -179,6 +185,15 @@ public int index;
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(Name))
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel8w)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(Enroll_no, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
@@ -188,22 +203,10 @@ public int index;
                                 .addComponent(jLabel4)
                                 .addGap(28, 28, 28)))
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(MobNo, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(MobNo, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(DOB, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabel3)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(Name))
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabel8w)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(Enroll_no, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(33, Short.MAX_VALUE))
+                                .addGap(5, 5, 5)
+                                .addComponent(DOB, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -404,7 +407,7 @@ public int index;
         new Home(Home.User_Loggedin).setVisible(true);
     }//GEN-LAST:event_Back_ButtonMouseClicked
 
-     private byte[] Convert_To_BLOB(String file) {
+     protected static byte[] Convert_To_BLOB(String file) {
         ByteArrayOutputStream bos = null;
         try {
             System.out.println("Input File Image:"+file);
@@ -428,15 +431,15 @@ public int index;
     }//GEN-LAST:event_Home_ButtonMouseClicked
 
     private void Img_FileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Img_FileActionPerformed
-                                    
-            Image_Selector = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
+
+            Image_Selector = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
             Image_Selector.setFileFilter(new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes()));
-            Image_Selector.setFileSelectionMode(JFileChooser.FILES_ONLY); 
-            
+            Image_Selector.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
         if (Image_Selector.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
-                                
+
                     System.out.println("Selected File Image:"+Image_Selector.getSelectedFile().getAbsolutePath());
-                    
+
                     BufferedImage img = null;
                     try {
                         img = ImageIO.read(new File(Image_Selector.getSelectedFile().getAbsolutePath()));
@@ -444,9 +447,9 @@ public int index;
                         System.out.println(e+"\nFill_ID_Form@437\n"+Arrays.toString(e.getStackTrace()));
                     }
                     Image dimg = img.getScaledInstance(Image_Label.getWidth(), Image_Label.getHeight(),Image.SCALE_SMOOTH);
-                    Image_Label.setIcon(new ImageIcon(dimg));                 
+                    Image_Label.setIcon(new ImageIcon(dimg));
         }
-    
+
     }//GEN-LAST:event_Img_FileActionPerformed
 
     private void Save_FormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Save_FormActionPerformed
@@ -465,53 +468,53 @@ public int index;
                                 System.out.println("Start Rows:"+index);
                               }
                       rs.close();
-                            
+
                       prestmt = DBconnect.getConnect().prepareStatement("INSERT INTO \"Students_ID\" (\"srno\", \"photo\", \"name\", \"dob\", \"mobile\", \"college\", \"address\", \"enroll_no\", \"dept\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                          
+
                             prestmt.setInt(1,index);
-                          
+
                             if(Image_Selector==null){
-                                JOptionPane.showMessageDialog(null,"PLEASE SELECT YOUR PICTURE.");                        
+                                JOptionPane.showMessageDialog(null,"PLEASE SELECT YOUR PICTURE.");
                             }else{
-                                prestmt.setBytes(2,Convert_To_BLOB(Image_Selector.getSelectedFile().getAbsolutePath()));         
+                                prestmt.setBytes(2,Convert_To_BLOB(Image_Selector.getSelectedFile().getAbsolutePath()));
                             }
-                            
+
                             if(Name.getText().isEmpty()){
                                 JOptionPane.showMessageDialog(null,"PLEASE ENTER NAME.");
                             }else{
                                 prestmt.setString(3,Name.getText());
                             }
-                            
+
                             if(DOB.getDate()==null){
                                 JOptionPane.showMessageDialog(null,"PLEASE SELECT DATE OF BIRTH.");
                             }else{
                             prestmt.setString(4,new SimpleDateFormat("dd-MM-yyyy").format(DOB.getDate()));
                             }
-                            
+
                             if(MobNo.getText().isEmpty()){
                                 JOptionPane.showMessageDialog(null,"PLEASE ENTER MOBILE NUMBER.");
                             }else{
-                                prestmt.setString(5,MobNo.getText());    
+                                prestmt.setString(5,MobNo.getText());
                             }
-                            
+
                             if(ClgName.getText().isEmpty()){
                                 JOptionPane.showMessageDialog(null,"PLEASE ENTER COLLAGE NAME.");
                             }else{
-                                prestmt.setString(6,ClgName.getText());   
+                                prestmt.setString(6,ClgName.getText());
                             }
-                            
+
                             if(Adr.getText().isEmpty()){
                                 JOptionPane.showMessageDialog(null,"PLEASE ENTER ADDRESS.");
                             }else{
                                 prestmt.setString(7,Adr.getText());
                             }
-                            
+
                             if(Enroll_no.getText().isEmpty()){
                                 JOptionPane.showMessageDialog(null,"PLEASE ENTER ADDRESS.");
                             }else{
                                 prestmt.setString(8,Enroll_no.getText());
                             }
-                            
+
                             if(dept.getText().isEmpty()){
                                 JOptionPane.showMessageDialog(null,"PLEASE ENTER ADDRESS.");
                             }else{
@@ -531,7 +534,7 @@ public int index;
                                 new Login_Page().setVisible(true);
                             }
                                 rs.close();
-                      
+
                 } catch (SQLException e) {
             System.out.println(e+"\nFill_ID_Form@529\n"+Arrays.toString(e.getStackTrace()));
                       try {
@@ -551,7 +554,7 @@ public int index;
         if(!(Character.isDigit(evt.getKeyChar()) || (evt.getKeyChar()==KeyEvent.VK_BACKSPACE) || evt.getKeyChar()==KeyEvent.VK_DELETE)){
             evt.consume();
             JOptionPane.showMessageDialog(null,"PLEASE ENTER NUMBERS ONLY.");
-            }    
+            }
     }//GEN-LAST:event_MobNoKeyTyped
 
     private void NameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NameKeyTyped
@@ -572,18 +575,22 @@ public int index;
         if(!(Character.isDigit(evt.getKeyChar()) || (evt.getKeyChar()==KeyEvent.VK_BACKSPACE) || evt.getKeyChar()==KeyEvent.VK_DELETE)){
                     evt.consume();
                     JOptionPane.showMessageDialog(null,"PLEASE ENTER NUMBERS ONLY.");
-                    } 
+                    }
     }//GEN-LAST:event_Enroll_noKeyTyped
 
     private void deptKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_deptKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_deptKeyTyped
 
+    private void DOBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DOBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DOBActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

@@ -11,8 +11,13 @@ import java.io.*;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.*;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.*;
 import javax.swing.table.*;
 
 /*
@@ -22,6 +27,8 @@ public class View_Form extends javax.swing.JFrame {
 DefaultTableModel model;
 BufferedImage img;
 Image dimg;
+public TableRowSorter sorter;
+public JFileChooser Image_Selector;
 public int srid;
     public  View_Form() {
         initComponents();
@@ -32,13 +39,13 @@ public int srid;
         view_table.getColumnModel().getColumn(i).setPreferredWidth(dim[i]);
         }
         try {
-            fetchDB();
+            fetchDB("SELECT * FROM Students_ID");
         } catch (SQLException e) {
-            System.out.println(e+"View_Form@37\n"+Arrays.toString(e.getStackTrace()));
+            System.out.println(e+"View_Form@39\n"+Arrays.toString(e.getStackTrace()));
         }
          
     }
-    
+
     public static boolean checkDB(){ 
         if (new View_Form().view_table != null && new View_Form().view_table.getModel() != null) {
             if(new View_Form().view_table.getModel().getRowCount()<=0){
@@ -47,20 +54,34 @@ public int srid;
         }
         return false;
     } 
-    private void fetchDB() throws SQLException{
+    private void fetchDB(String sql) throws SQLException{
         
          model= (DefaultTableModel)view_table.getModel();
-        prestmt = DBconnect.getConnect().prepareStatement("SELECT * FROM Students_ID");
+        prestmt = DBconnect.getConnect().prepareStatement(sql);
+        if(!sql.equals("SELECT * FROM Students_ID")){   
+        prestmt.setString(1,"%"+search.getText()+"%");
+        prestmt.setString(2,"%"+search.getText()+"%");
+        prestmt.setString(3,"%"+search.getText()+"%");
+        prestmt.setString(4,"%"+search.getText()+"%");
+        prestmt.setString(5,"%"+search.getText()+"%");
+        prestmt.setString(6,"%"+search.getText()+"%");    
+            System.out.println(sql);
+        }
                 rs = prestmt.executeQuery();
+                model.setRowCount(0);
                 while(rs.next()){
                     model.addRow(new Object[]{rs.getInt("srno"),rs.getString("name"),rs.getString("dob"),rs.getString("mobile"),rs.getString("college"),rs.getString("address"),rs.getString("dept"),rs.getString("enroll_no")});
                 }
     }
 
+
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Img_File = new javax.swing.JButton();
+        jProgressBar1 = new javax.swing.JProgressBar();
         Back_Button1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         view_table = new javax.swing.JTable();
@@ -81,13 +102,25 @@ public int srid;
         jLabel7 = new javax.swing.JLabel();
         update = new javax.swing.JButton();
         delete = new javax.swing.JButton();
-        dbdate = new org.jdesktop.swingx.JXDatePicker();
         Home_Button = new javax.swing.JLabel();
         view_id = new javax.swing.JButton();
         dbenroll_no = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         dbdept = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
+        dbdate = new org.jdesktop.swingx.JXDatePicker();
+        Img_File1 = new javax.swing.JButton();
+        search = new javax.swing.JTextField();
+        searchbtn = new javax.swing.JButton();
+        refresh = new javax.swing.JButton();
+
+        Img_File.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        Img_File.setText("Browse");
+        Img_File.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Img_FileActionPerformed(evt);
+            }
+        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("View_Form");
@@ -198,7 +231,7 @@ public int srid;
         jScrollPane2.setViewportView(dbaddress);
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jLabel7.setText("ID");
+        jLabel7.setText("ID :-");
 
         update.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         update.setText("UPDATE");
@@ -251,6 +284,28 @@ public int srid;
         jLabel9.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         jLabel9.setText("Department");
 
+        Img_File1.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        Img_File1.setText("Browse");
+        Img_File1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Img_File1ActionPerformed(evt);
+            }
+        });
+
+        searchbtn.setText("Search");
+        searchbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchbtnActionPerformed(evt);
+            }
+        });
+
+        refresh.setText("Refresh");
+        refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -258,25 +313,26 @@ public int srid;
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(Back_Button1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(Home_Button)
-                                .addGap(228, 228, 228)
-                                .addComponent(jLabel1)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(Back_Button1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Home_Button)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
+                        .addComponent(refresh)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(searchbtn)
+                        .addGap(20, 20, 20))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(6, 6, 6)
+                                .addComponent(Img_File1)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -284,54 +340,77 @@ public int srid;
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
                             .addComponent(dbnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dbdate, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5)
-                            .addComponent(jScrollPane2)
-                            .addComponent(dbclg))
+                            .addComponent(dbdate, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addContainerGap(181, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(dbenroll_no, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(jLabel9)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(dbdept, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGap(37, 37, 37)
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(update, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(view_id, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(delete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(37, 37, 37))))))
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jScrollPane2)
+                                    .addComponent(dbclg))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(dbenroll_no, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                .addComponent(jLabel9)
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                            .addComponent(dbdept, javax.swing.GroupLayout.Alignment.LEADING))
+                                        .addGap(37, 37, 37)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(update, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(view_id, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(delete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(37, 37, 37))))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(Home_Button)
-                            .addComponent(Back_Button1))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(Home_Button)
+                                .addComponent(Back_Button1))
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(searchbtn)
+                            .addComponent(refresh))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
+                        .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Img_File1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel8)
                         .addGap(4, 4, 4)
-                        .addComponent(dbclg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel9)
-                        .addGap(4, 4, 4)
-                        .addComponent(dbdept, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dbenroll_no, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(update)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(view_id)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(delete))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(4, 4, 4)
@@ -344,29 +423,25 @@ public int srid;
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(dbdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(4, 4, 4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel4)
                                 .addGap(4, 4, 4)
                                 .addComponent(dbnumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(id, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(4, 4, 4)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dbenroll_no, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(update)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(view_id)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(delete)))))
-                .addContainerGap(13, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(id, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(4, 4, 4)
+                        .addComponent(dbclg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel9)
+                        .addGap(4, 4, 4)
+                        .addComponent(dbdept, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(3, 3, 3))
         );
 
         pack();
@@ -416,7 +491,7 @@ byte[] imageByte;
                      new Home(Home.User_Loggedin).setVisible(true);
     }else{
         try{
-          prestmt = DBconnect.getConnect().prepareStatement("UPDATE \"Students_ID\" SET \"name\"=?, \"dob\"=?, \"mobile\"=?, \"college\"=?, \"address\"=?, \"enroll_no\"=?, \"dept\"=? WHERE `srno`=?");
+          prestmt = DBconnect.getConnect().prepareStatement("UPDATE \"Students_ID\" SET \"name\"=?, \"dob\"=?, \"mobile\"=?, \"college\"=?, \"address\"=?, \"enroll_no\"=?, \"dept\"=?, \"photo\"=? WHERE `srno`=?");
 
                                  if(dbname.getText().isEmpty()){
                                      JOptionPane.showMessageDialog(null,"PLEASE ENTER NAME.");
@@ -459,14 +534,19 @@ byte[] imageByte;
                                  }else{
                                      prestmt.setString(7,dbdept.getText());
                                  }
-                                 prestmt.setInt(8,srid);
+                                 if(Image_Selector==null){
+                                JOptionPane.showMessageDialog(null,"PLEASE SELECT YOUR PICTURE.");                        
+                                }else{
+                                    prestmt.setBytes(8,Fill_ID_Form.Convert_To_BLOB(Image_Selector.getSelectedFile().getAbsolutePath()));         
+                                }
+                                 prestmt.setInt(9,srid);
                                  int result=prestmt.executeUpdate();
                                  System.out.println("\n Result:"+result);
                                  if(result==1){
                                      System.out.println("Student Information Updated...");
                                      JOptionPane.showMessageDialog(null, "Student Information Updated...", "Task Complete", JOptionPane.INFORMATION_MESSAGE);
                                      model.setRowCount(0);
-                                     fetchDB();
+                                     fetchDB("SELECT * FROM Students_ID");
                                  }else{
                                  System.out.println("Something Goes Wrong Please Try Again...");
                                      JOptionPane.showMessageDialog(null, "Something Is Wrong Please Try Again...", "Task Fail", JOptionPane.INFORMATION_MESSAGE);
@@ -498,7 +578,7 @@ byte[] imageByte;
                                 dbnumber.setText("");
                                 dbenroll_no.setText("");
                                 dbdept.setText("");
-                                fetchDB();
+                                fetchDB("SELECT * FROM Students_ID");
                             }else{
                             System.out.println("Something Goes Wrong Please Try Again...");
                                 JOptionPane.showMessageDialog(null, "Something Is Wrong Please Try Again...", "Task Fail", JOptionPane.INFORMATION_MESSAGE);
@@ -567,6 +647,72 @@ byte[] imageByte;
             }    
     }//GEN-LAST:event_dbdeptKeyTyped
 
+    private void Img_FileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Img_FileActionPerformed
+
+        Image_Selector = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+        Image_Selector.setFileFilter(new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes()));
+        Image_Selector.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        if (Image_Selector.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+
+            System.out.println("Selected File Image:"+Image_Selector.getSelectedFile().getAbsolutePath());
+
+            BufferedImage img = null;
+            try {
+                img = ImageIO.read(new File(Image_Selector.getSelectedFile().getAbsolutePath()));
+            } catch (IOException e) {
+                System.out.println(e+"\nFill_ID_Form@437\n"+Arrays.toString(e.getStackTrace()));
+            }
+            Image dimg = img.getScaledInstance(pic.getWidth(), pic.getHeight(),Image.SCALE_SMOOTH);
+            pic.setIcon(new ImageIcon(dimg));
+        }
+
+    }//GEN-LAST:event_Img_FileActionPerformed
+
+    private void Img_File1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Img_File1ActionPerformed
+
+        Image_Selector = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+        Image_Selector.setFileFilter(new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes()));
+        Image_Selector.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        if (Image_Selector.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+
+            System.out.println("Selected File Image:"+Image_Selector.getSelectedFile().getAbsolutePath());
+
+            BufferedImage img = null;
+            try {
+                img = ImageIO.read(new File(Image_Selector.getSelectedFile().getAbsolutePath()));
+            } catch (IOException e) {
+                System.out.println(e+"\nFill_ID_Form@437\n"+Arrays.toString(e.getStackTrace()));
+            }
+            Image dimg = img.getScaledInstance(pic.getWidth(), pic.getHeight(),Image.SCALE_SMOOTH);
+            pic.setIcon(new ImageIcon(dimg));
+        }
+    }//GEN-LAST:event_Img_File1ActionPerformed
+
+    private void searchbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchbtnActionPerformed
+  
+         if(search.getText().equals("")){
+                JOptionPane.showMessageDialog(null,"PLEASE ENTER INTO SERCH BOX.");                        
+         }else{
+                try {
+                     fetchDB("SELECT * FROM `Students_ID` WHERE \"name\" LIKE ? OR \"mobile\" LIKE ? OR \"college\" LIKE ? OR \"address\" LIKE ? OR \"enroll_no\" LIKE ? OR \"dept\" LIKE ?");
+                     } catch (SQLException e) {
+                           System.out.println(e+"View_Form@687\n"+Arrays.toString(e.getStackTrace()));
+                     }    
+              }
+    }//GEN-LAST:event_searchbtnActionPerformed
+
+    private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
+    try {
+        search.setText("");
+        fetchDB("SELECT * FROM Students_ID");
+    } catch (SQLException e) {
+        System.out.println(e+"View_Form@710\n"+Arrays.toString(e.getStackTrace()));
+    }
+    }//GEN-LAST:event_refreshActionPerformed
+
+    
     
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -592,13 +738,15 @@ byte[] imageByte;
             new View_Form().setVisible(true);
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Back_Button1;
     private javax.swing.JLabel Home_Button;
+    private javax.swing.JButton Img_File;
+    private javax.swing.JButton Img_File1;
     public javax.swing.JTextArea dbaddress;
     public javax.swing.JTextField dbclg;
-    public org.jdesktop.swingx.JXDatePicker dbdate;
+    private org.jdesktop.swingx.JXDatePicker dbdate;
     public javax.swing.JTextField dbdept;
     public javax.swing.JTextField dbenroll_no;
     public javax.swing.JTextField dbname;
@@ -615,9 +763,13 @@ byte[] imageByte;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     public javax.swing.JLabel pic;
+    private javax.swing.JButton refresh;
+    private javax.swing.JTextField search;
+    private javax.swing.JButton searchbtn;
     private javax.swing.JButton update;
     private javax.swing.JButton view_id;
     public javax.swing.JTable view_table;
