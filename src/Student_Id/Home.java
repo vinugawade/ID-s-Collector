@@ -1,17 +1,24 @@
 package Student_Id;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /*
  * @author Vinu_Gawade
  */
 public class Home extends javax.swing.JFrame {
-public static String User_Loggedin;
+
+    public static String User_Loggedin;
+
     public Home(String User_Loggedin) {
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/Img/desktop_logo.png")).getImage());
-         Home.User_Loggedin= User_Loggedin;
-        Head_Home.setText(Head_Home.getText()+User_Loggedin);
+        Home.User_Loggedin = User_Loggedin;
+        Head_Home.setText(Head_Home.getText() + User_Loggedin);
     }
 
     @SuppressWarnings("unchecked")
@@ -24,6 +31,7 @@ public static String User_Loggedin;
         Form_Fill1 = new javax.swing.JButton();
         user = new javax.swing.JLabel();
         Home_Button = new javax.swing.JLabel();
+        Config_Page = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Home");
@@ -80,18 +88,28 @@ public static String User_Loggedin;
             }
         });
 
+        Config_Page.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        Config_Page.setText("Config");
+        Config_Page.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Config_PageActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(Home_Button)
                         .addGap(42, 42, 42)
-                        .addComponent(Head_Home, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(Head_Home, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(40, 40, 40)
+                        .addComponent(Config_Page, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(user))
         );
@@ -106,7 +124,9 @@ public static String User_Loggedin;
                             .addComponent(user)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(Home_Button)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Config_Page)
+                            .addComponent(Home_Button))))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(20, Short.MAX_VALUE))
@@ -116,31 +136,36 @@ public static String User_Loggedin;
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public void SetHeading(String User_Loggedin){   
-                    System.out.println("Login By "+Head_Home.getText()+User_Loggedin);
-        Head_Home.setText(Head_Home.getText()+User_Loggedin);
+    public void SetHeading(String User_Loggedin) {
+        System.out.println("Login By " + Head_Home.getText() + User_Loggedin);
+        Head_Home.setText(Head_Home.getText() + User_Loggedin);
     }
     private void View_IDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_View_IDActionPerformed
-            this.setVisible(false);
-            new Fill_ID_Form().setVisible(true);     
-            
+        this.setVisible(false);
+        new Fill_ID_Form().setVisible(true);
+
     }//GEN-LAST:event_View_IDActionPerformed
 
     private void Form_Fill1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Form_Fill1ActionPerformed
-            
-            if(View_Form.checkDB()==true){
-                    System.out.println("Nothing Exist in Database...");
-                    JOptionPane.showMessageDialog(null, "Nothing Exist in Database...", "Task Fail", JOptionPane.INFORMATION_MESSAGE);
-            }else{
+
+        if (View_Form.checkDB() == true) {
+            System.out.println("Nothing Exist in Database...");
+            JOptionPane.showMessageDialog(null, "Nothing Exist in Database...", "Task Fail", JOptionPane.INFORMATION_MESSAGE);
+        } else {
             this.setVisible(false);
-            new View_Form().setVisible(true);     
-            }
+            new View_Form().setVisible(true);
+        }
     }//GEN-LAST:event_Form_Fill1ActionPerformed
 
     private void Home_ButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Home_ButtonMouseClicked
         this.setVisible(false);
         new Login_Page().setVisible(true);
     }//GEN-LAST:event_Home_ButtonMouseClicked
+
+    private void Config_PageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Config_PageActionPerformed
+        this.setVisible(false);
+        new Config_Page().setVisible(true);
+    }//GEN-LAST:event_Config_PageActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -173,6 +198,7 @@ public static String User_Loggedin;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JButton Config_Page;
     public javax.swing.JButton Form_Fill1;
     public javax.swing.JLabel Head_Home;
     private javax.swing.JLabel Home_Button;
