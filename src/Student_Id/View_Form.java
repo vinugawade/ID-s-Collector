@@ -481,7 +481,6 @@ public class View_Form extends javax.swing.JFrame {
                 if (Image_Selector != null) {
                     prestmt.setBytes(8, Validator.Convert_To_BLOB(Image_Selector.getSelectedFile().getAbsolutePath()));
                 }
-//                else {JOptionPane.showMessageDialog(null, "PLEASE SELECT YOUR PICTURE.");}
 
                 if (Image_Selector != null) {
                     prestmt.setInt(9, srid);

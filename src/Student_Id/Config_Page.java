@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Student_Id;
 
 import java.io.*;
@@ -11,10 +7,13 @@ import java.awt.Image;
 import javax.imageio.*;
 import java.awt.image.*;
 import Required.DBconnect;
+import static Student_Id.Fill_ID_Form.prestmt;
+import static Student_Id.Fill_ID_Form.rs;
 import java.sql.SQLException;
 import javax.swing.filechooser.*;
-import static Student_Id.Fill_ID_Form.rs;
-import static Student_Id.Fill_ID_Form.prestmt;
+import java.text.SimpleDateFormat;
+import org.json.simple.*;
+import org.json.simple.parser.*;
 
 /**
  *
@@ -31,6 +30,7 @@ public class Config_Page extends javax.swing.JFrame {
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/Img/desktop_logo.png")).getImage());
         try {
+            JSONParser parser = new JSONParser();
             prestmt = DBconnect.getConnect().prepareStatement("SELECT * FROM config");
             rs = prestmt.executeQuery();
             while (rs.next()) {
@@ -38,25 +38,20 @@ public class Config_Page extends javax.swing.JFrame {
                     imageByte = rs.getBytes(2);
                     img = ImageIO.read(new ByteArrayInputStream(imageByte));
                     dimg = img.getScaledInstance(clg_logo.getWidth(), clg_logo.getHeight(), Image.SCALE_SMOOTH);
-                    clg_logo.setIcon(new ImageIcon(dimg));
+                    clg_logo.setIcon(new ImageIcon(dimg)); //.replace("\\", "")
                 }
-                if (rs.getString(1).equals("clg_name")) {
-                    clg_name.setText(rs.getString(2));
-                }
-                if (rs.getString(1).equals("clg_addr")) {
-                    clg_addr.setText(rs.getString(2));
-                }
-                if (rs.getString(1).equals("clg_DTE_code")) {
-                    clg_DTE_code.setText(rs.getString(2));
-                }
-                if (rs.getString(1).equals("clg_MSBTE_code")) {
-                    clg_MSBTE_code.setText(rs.getString(2));
-                }
-                if (rs.getString(1).equals("clg_contact")) {
-                    clg_contact.setText(rs.getString(2));
+                if (rs.getString(1).equals("config")) {
+                    Object DataObj = parser.parse(rs.getString(2));
+                    JSONObject Data = (JSONObject) DataObj;
+                    clg_name.setText(Data.get("clg_name").toString());
+                    clg_addr.setText(Data.get("clg_addr").toString());
+                    clg_DTE_code.setText(Data.get("clg_DTE_code").toString());
+                    clg_MSBTE_code.setText(Data.get("clg_MSBTE_code").toString());
+                    clg_contact.setText(Data.get("clg_contact").toString());
                 }
             }
-        } catch (SQLException | IOException e) {
+            rs.close();
+        } catch (IOException | SQLException | ParseException e) {
             System.out.println(e + "\nConfig_Page@185\n" + Arrays.toString(e.getStackTrace()));
         }
     }
@@ -273,16 +268,16 @@ public class Config_Page extends javax.swing.JFrame {
                             .addComponent(Show_Img, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
-                                .addGap(34, 34, 34)
+                                .addGap(35, 35, 35)
                                 .addComponent(jLabel7)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addComponent(clg_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
+                        .addGap(23, 23, 23)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(clg_contact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -362,6 +357,104 @@ public class Config_Page extends javax.swing.JFrame {
 
     private void Save_FormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Save_FormActionPerformed
 
+        if (Image_Selector != null) {
+            try {
+                String sql = "UPDATE \"main\".\"config\" SET \"value\"=? WHERE \"key\"=\"clg_logo\"";
+                prestmt = DBconnect.getConnect().prepareStatement(sql);
+                prestmt.setBytes(1, Validator.Convert_To_BLOB(Image_Selector.getSelectedFile().getAbsolutePath()));
+                int result = prestmt.executeUpdate();
+                System.out.println("\n Result:" + result);
+                if (result != 1) {
+                    System.out.println("Something Goes Wrong Please Try Again...");
+                    JOptionPane.showMessageDialog(null, "Failed To Update Logo.", "Task Fail", JOptionPane.INFORMATION_MESSAGE);
+                    this.setVisible(false);
+                    new Home(Home.User_Loggedin).setVisible(true);
+                }
+                rs.close();
+            } catch (SQLException ex) {
+                System.out.println(ex + "Config_Page@390\n" + Arrays.toString(ex.getStackTrace()));
+            }
+
+        } else {
+            try {
+                Map<String, String> normal_array = new HashMap<>();
+                String sql = "UPDATE \"main\".\"config\" SET \"value\"=? WHERE \"key\"=\"config\"";
+                prestmt = DBconnect.getConnect().prepareStatement(sql);
+
+                if (clg_name.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please Enter Name.");
+                } else {
+                    if (Validator.isValidText(clg_name.getText())) {
+                        normal_array.put("clg_name", clg_name.getText());
+                    } else {
+                        normal_array.put("clg_name", "");
+                        JOptionPane.showMessageDialog(null, "Please Enter Valid Name.");
+                    }
+                }
+
+                if (clg_addr.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please Enter Address.");
+                } else {
+                    if (Validator.isValidText(clg_addr.getText())) {
+                        normal_array.put("clg_addr", clg_addr.getText());
+                    } else {
+                        normal_array.put("clg_addr", "");
+                        JOptionPane.showMessageDialog(null, "Please Enter Valid Address.");
+                    }
+                }
+
+                if (clg_DTE_code.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please Enter DTE Code.");
+                    normal_array.put("clg_DTE_code", "");
+                } else {
+//                    if (Validator.isValidText(clg_DTE_code.getText())) {
+                    normal_array.put("clg_DTE_code", clg_DTE_code.getText());
+//                    } else {
+//                        JOptionPane.showMessageDialog(null, "Please Enter Valid DTE Code.");
+//                    }
+                }
+
+                if (clg_MSBTE_code.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please Enter MSBTE Code.");
+                    normal_array.put("clg_MSBTE_code", "");
+                } else {
+//                    if (Validator.isValidText(clg_MSBTE_code.getText())) {
+                    normal_array.put("clg_MSBTE_code", clg_MSBTE_code.getText());
+//                    } else {
+//                        JOptionPane.showMessageDialog(null, "Please Enter Valid MSBTE Code.");
+//                    }
+                }
+
+                if (clg_contact.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please Enter Contact Number.");
+                } else {
+                    if (Validator.isValidPhoneNo(clg_contact.getText())) {
+                        normal_array.put("clg_contact", clg_contact.getText());
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Please Enter Valid Contact Number.");
+                        normal_array.put("clg_contact", clg_MSBTE_code.getText());
+                    }
+                }
+
+                JSONArray json_data = new JSONArray();
+                json_data.add(normal_array);
+                prestmt.setString(1, json_data.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                int result = prestmt.executeUpdate();
+                System.out.println("\n Result:" + result);
+                if (result == 1) {
+                    System.out.println("Configurations Updated...");
+                    JOptionPane.showMessageDialog(null, "Configurations Updated...", "Task Complete", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    System.out.println("Something Goes Wrong Please Try Again...");
+                    JOptionPane.showMessageDialog(null, "Something Is Wrong Please Try Again...", "Task Fail", JOptionPane.INFORMATION_MESSAGE);
+                    this.setVisible(false);
+                    new Home(Home.User_Loggedin).setVisible(true);
+                }
+                rs.close();
+            } catch (SQLException ex) {
+                System.out.println(ex + "Config_Page@409\n" + Arrays.toString(ex.getStackTrace()));
+            }
+        }
     }//GEN-LAST:event_Save_FormActionPerformed
 
     /**
@@ -381,13 +474,17 @@ public class Config_Page extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Fill_ID_Form.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Fill_ID_Form.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Fill_ID_Form.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Fill_ID_Form.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Fill_ID_Form.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Fill_ID_Form.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Fill_ID_Form.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Fill_ID_Form.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -408,7 +505,7 @@ public class Config_Page extends javax.swing.JFrame {
     private javax.swing.JTextField clg_MSBTE_code;
     public javax.swing.JTextArea clg_addr;
     public javax.swing.JTextField clg_contact;
-    private javax.swing.JLabel clg_logo;
+    public javax.swing.JLabel clg_logo;
     public javax.swing.JTextField clg_name;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

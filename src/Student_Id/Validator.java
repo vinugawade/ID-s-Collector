@@ -23,7 +23,7 @@ public class Validator {
         m = p.matcher(num);
         return (m.matches());
     }
-    
+
     protected static boolean isValidEnrollNo(String num) {
         p = Pattern.compile("^[0-9]\\d{9}$"); // Enrollment Number Regex.
         m = p.matcher(num);
@@ -35,7 +35,7 @@ public class Validator {
         m = p.matcher(name);
         return (m.matches());
     }
-       
+
     protected static byte[] Convert_To_BLOB(String file) {
         ByteArrayOutputStream bos = null;
         try {
